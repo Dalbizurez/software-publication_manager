@@ -1,21 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import PostgresPostRepository from "@/utils/postgres-post-repository";
+import Validator from "@/utils/validator";
+import PostRegister from "@/utils/post-register";
 import Post from "@/utils/post";
-import { jsonToPost, postValidation, savePost } from "@/utils/post-register";
 
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
 
-        const post = jsonToPost(data);
+        const post = PostRegister.jsonToPost(data);
 
-        if (!post || !postValidation(post)) {
+        if (!post || !Validator.postValidation(post)) {
             return NextResponse.json({
                 error: 'Invalid post data',
             }, { status: 400 });
         }
 
-        await savePost(post);
+        const postRegister = new PostRegister(post);
+        await postRegister.savePost();
         return NextResponse.json({
             message: 'Post data saved succesfully',
         });
