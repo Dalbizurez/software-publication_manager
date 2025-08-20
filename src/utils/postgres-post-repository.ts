@@ -12,7 +12,7 @@ export default class PostgresPostRepository {
 
     async save(post: Post): Promise<void> {
         try {
-            await this.sql`INSERT INTO post (title, description, author) VALUES (${post.title}, ${post.description}, ${post.author});`;
+            await this.sql`INSERT INTO post (title, description, author) VALUES (${post.title.value}, ${post.description.value}, ${post.author.value});`;
         } catch (error) {
             console.error(error)
             throw new Error('Failed to save post')

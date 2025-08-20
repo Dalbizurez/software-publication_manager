@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Validator from "@/utils/validator";
 import PostRegister from "@/utils/post-register";
 import Post from "@/utils/post";
 
@@ -7,16 +6,15 @@ export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
 
-        const post = PostRegister.jsonToPost(data);
-
-        if (!post || !Validator.postValidation(post)) {
-            return NextResponse.json({
-                error: 'Invalid post data',
-            }, { status: 400 });
-        }
+        const post = Post.create(
+            data.title,
+            data.description,
+            data.author
+        );
 
         const postRegister = new PostRegister(post);
         await postRegister.savePost();
+        
         return NextResponse.json({
             message: 'Post data saved succesfully',
         });

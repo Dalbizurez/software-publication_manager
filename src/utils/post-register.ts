@@ -14,11 +14,4 @@ export default class PostRegister {
         return repository.save(this.#post);
     }
 
-    static jsonToPost(data: any): Post | null {
-        if (!data.title || !data.description || !data.author) {
-            return null;
-        }
-        return new Post(data.title, data.description, data.author);
-    }
-
 }
