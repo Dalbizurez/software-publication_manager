@@ -1,13 +1,15 @@
 import Post from "../post";
-import PostgresPostRepository from "../postRepositories/postgres-post-repository";
+import PostRepository from "../postRepositories/post-repository";
 
 export default class PostFinder {
-    constructor() {
+    #repository: PostRepository;
+
+    constructor(repository: PostRepository) {
+        this.#repository = repository;
     }
 
     getAll(): Promise<Post[]> {
-        const repository = new PostgresPostRepository();
-        return repository.getAll();
+        return this.#repository.getAll();
     }
 
 }

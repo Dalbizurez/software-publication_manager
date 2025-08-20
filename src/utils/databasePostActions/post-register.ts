@@ -1,17 +1,18 @@
 import Post from "../post";
-import PostgresPostRepository from "../postRepositories/postgres-post-repository";
+import PostRepository from "../postRepositories/post-repository";
 
 export default class PostRegister {
 
     #post: Post;
+    #repository: PostRepository;
 
-    constructor(post: Post) {
+    constructor(post: Post, repository: PostRepository) {
         this.#post = post;
+        this.#repository = repository;
     }
 
     savePost(): Promise<void> {
-        const repository = new PostgresPostRepository();
-        return repository.save(this.#post);
+        return this.#repository.save(this.#post);
     }
 
 }
