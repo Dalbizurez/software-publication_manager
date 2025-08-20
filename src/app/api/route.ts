@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import PostRegister from "@/utils/post-register";
+import PostRegister from "@/utils/databasePostActions/post-register";
 import Post from "@/utils/post";
+import PostFinder from "@/utils/databasePostActions/post-finder";
 
 export async function POST(request: NextRequest) {
     try {
@@ -26,4 +27,19 @@ export async function POST(request: NextRequest) {
         }, {status: 400});
     }
 
+}
+
+export async function GET(request: NextRequest) {
+    try {
+
+        const postFinder = new PostFinder();
+
+        const posts = await postFinder.getAll();
+        return NextResponse.json(posts);
+    } catch (error){
+        console.error('Error fetching posts:', error);
+        return NextResponse.json({
+            error: error instanceof Error ? error.message: 'Failed to fetch posts'
+        }, {status: 400});
+    }
 }
