@@ -1,26 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import PostgresPostRepository from "@/utils/postgres-post-repository";
 import Post from "@/utils/post";
+import { jsonToPost, postValidation, savePost } from "@/utils/post-register";
 
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
 
-        if (!data.title || data.title.length < 2){
-            throw new Error('Title must be at least 2 characters long');
+        const post = jsonToPost(data);
+
+        if (!post || !postValidation(post)) {
+            return NextResponse.json({
+                error: 'Invalid post data',
+            }, { status: 400 });
         }
 
-        if (!data.description || data.description.length < 10) {
-            throw new Error('Description must be at least 10 characters long');
-        }
-
-        if (!data.author || data.author.length < 3) {
-            throw new Error('Author must be at least 3 characters long');
-        }
-
-        const repository = new PostgresPostRepository();
-        await repository.save(new Post(data.title, data.description, data.author));
-
+        await savePost(post);
         return NextResponse.json({
             message: 'Post data saved succesfully',
         });
