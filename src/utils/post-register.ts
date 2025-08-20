@@ -1,5 +1,5 @@
 import Post from "./post";
-import PostgresPostRepository from "./postgres-post-repository";
+import PostgresPostRepository from "./postRepositories/postgres-post-repository";
 
 export default class PostRegister {
 

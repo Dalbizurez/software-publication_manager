@@ -1,8 +1,9 @@
 import { Sql } from 'postgres';
 import postgres from 'postgres';
-import Post from './post';
+import Post from '../post';
+import PostRepository from './post-repository';
 
-export default class PostgresPostRepository {
+export default class PostgresPostRepository implements PostRepository {
     private readonly sql: Sql;
 
     constructor() {
