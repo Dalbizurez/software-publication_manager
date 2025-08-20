@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import PostgresPostRepository from "@/utils/postgres-post-repository";
+import Post from "@/utils/post";
 
 export async function POST(request: NextRequest) {
     try {
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
         }
 
         const repository = new PostgresPostRepository();
-        await repository.save(data.title, data.description, data.author);
+        await repository.save(new Post(data.title, data.description, data.author));
 
         return NextResponse.json({
             message: 'Post data saved succesfully',
