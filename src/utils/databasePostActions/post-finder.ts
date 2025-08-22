@@ -12,4 +12,8 @@ export default class PostFinder {
         return this.#repository.getAll();
     }
 
+    getById(id: any): Promise<Post | null> {
+        return this.#repository.getById(id);
+    }
+
 }

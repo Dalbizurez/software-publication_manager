@@ -34,7 +34,9 @@ export default class PostgresPostRepository implements PostRepository {
         try {
             const result = await this.sql`SELECT * FROM post WHERE id = ${id}`;
             if (result.length) {
-                return Post.create(result[0].title, result[0].description, result[0].author);
+                const post = Post.create(result[0].title, result[0].description, result[0].author)
+                post.id = result[0].id;
+                return post;
             }
             throw new Error('Post not found');
         } catch (error) {
