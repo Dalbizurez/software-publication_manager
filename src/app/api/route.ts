@@ -48,3 +48,27 @@ export async function GET(request: NextRequest) {
         }, {status: 400});
     }
 }
+
+export async function PUT(request: NextRequest) {
+    try {
+        const data = await request.json();
+
+        const title = data.title;
+        const description = data.description;
+        const author = data.author;
+        
+        const id = data.id;
+        
+        const postUpdater = new PostUpdater(repository);
+        await postUpdater.update(id, title, description, author);
+
+        return NextResponse.json({
+            message: 'Post updated successfully',
+        });
+    } catch (error) {
+        console.error('Error updating post:', error);
+        return NextResponse.json({
+            error: error instanceof Error ? error.message: 'Failed to update post'
+        }, {status: 400});
+    }
+}

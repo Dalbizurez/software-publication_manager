@@ -23,10 +23,34 @@ export default class PostgresPostRepository implements PostRepository {
     async getAll(): Promise<Post[]> {
         try{
             const result = await this.sql`SELECT * FROM post`;
-            return result.map(row => new Post(row.title, row.description, row.author));
+            return result.map(row => new Post(row.title, row.description, row.author, row.id));
         } catch (error) {
             console.error(error);
             throw new Error('Failed to retrieve posts');
+        }
+    }
+
+    async getById(id: any): Promise<Post> {
+        try {
+            const result = await this.sql`SELECT * FROM post WHERE id = ${id}`;
+            if (result.length) {
+                return Post.create(result[0].title, result[0].description, result[0].author);
+            }
+            throw new Error('Post not found');
+        } catch (error) {
+            console.error(error);
+            throw new Error('Failed to retrieve post');
+        }
+    }
+
+    async update(id: any, title?:string, description?:string, author?:string): Promise<void> {
+        try {
+            const post = await this.getById(id);
+            console.log(title?? post.title.value, description ?? post.description.value, author ?? post.author.value);
+            await this.sql`UPDATE post SET title = ${title ?? post.title.value}, description = ${description ?? post.description.value}, author = ${author ?? post.author.value} WHERE id = ${id}`;
+        } catch (error) {
+            console.error(error);
+            throw new Error('Failed to update post');
         }
     }
 }
