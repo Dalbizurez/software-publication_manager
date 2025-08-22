@@ -1,7 +1,7 @@
 import Post from "../post";
 import PostRepository from "../postRepositories/post-repository";
 
-export default class PostFinder {
+export default class PostUpdater {
     #repository: PostRepository;
 
     constructor(repository: PostRepository) {

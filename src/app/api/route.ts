@@ -58,7 +58,7 @@ export async function PUT(request: NextRequest) {
         const author = data.author;
         
         const id = data.id;
-        
+
         const postUpdater = new PostUpdater(repository);
         await postUpdater.update(id, title, description, author);
 
