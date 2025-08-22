@@ -9,4 +9,6 @@ export default interface PostRepository {
 
     update(id:any, title?:string, description?:string, author?:string): Promise<void>;
 
+    delete(id: any): Promise<void>;
+
 }

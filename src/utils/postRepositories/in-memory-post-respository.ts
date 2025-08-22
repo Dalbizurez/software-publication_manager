@@ -19,13 +19,30 @@ export default class InMemoryPostRepository implements PostRepository {
         return Promise.resolve(this.posts[index] || null);
     }
 
-    async update(id: any, post: Post): Promise<void> {
+    async update(id: any, title?: string, description?: string, author?: string): Promise<void> {
         const oldPost = await this.getById(id);
         const index = this.posts.findIndex(p => p.id === id);
         if (oldPost) {
-            this.posts[index] = post;
-        }else {
+            const updatedPost = Post.create(
+                title ?? oldPost.title.value,
+                description ?? oldPost.description.value,
+                author ?? oldPost.author.value
+            );
+            updatedPost.id = id;
+            this.posts[index] = updatedPost;
+        } else {
             throw new Error("Post not found");
         }
     }
+
+    async delete(id: any): Promise<void> {
+        const index = this.posts.findIndex(p => p.id === id);
+        if (index !== -1) {
+            this.posts.splice(index, 1);
+        } else {
+            throw new Error("Post not found");
+        }
+    }
+
+
 }

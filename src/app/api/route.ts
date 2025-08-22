@@ -5,6 +5,7 @@ import PostFinder from "@/utils/databasePostActions/post-finder";
 import PostUpdater from "@/utils/databasePostActions/post-updater";
 
 import PostgresPostRepository from "@/utils/postRepositories/postgres-post-repository";
+import PostDeleter from "@/utils/databasePostActions/post-deleter";
 
 const repository = new PostgresPostRepository();
 
@@ -69,6 +70,27 @@ export async function PUT(request: NextRequest) {
         console.error('Error updating post:', error);
         return NextResponse.json({
             error: error instanceof Error ? error.message: 'Failed to update post'
+        }, {status: 400});
+    }
+}
+
+
+
+export async function DELETE(request: NextRequest) {
+    try {
+        const data = await request.json();
+        const id = data.id;
+
+        const postDeleter = new PostDeleter(repository);
+        await postDeleter.delete(id);
+
+        return NextResponse.json({
+            message: 'Post deleted successfully',
+        });
+    } catch (error) {
+        console.error('Error deleting post:', error);
+        return NextResponse.json({
+            error: error instanceof Error ? error.message: 'Failed to delete post'
         }, {status: 400});
     }
 }
